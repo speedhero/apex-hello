@@ -1,0 +1,59 @@
+
+repositories {
+    mavenLocal()
+    maven {
+        credentials {
+            username = "${NEXUS_USER}"
+            password = "${NEXUS_PASSWORD}"
+        }
+        url "http://192.168.184.28:8081/repository/maven-public/"
+    }
+    mavenCentral()
+}
+
+apply plugin: 'java'
+apply plugin: 'war'
+apply plugin: 'maven'
+apply plugin: 'maven-publish'
+
+group 'apexsoft.ams'
+version '1.0.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+
+configurations.all {
+    all*.exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+    resolutionStrategy {
+        failOnVersionConflict()
+        force 'org.slf4j:slf4j-api:1.7.32'
+        force 'org.slf4j:slf4j-log4j12:1.7.25'
+        force 'org.apache.zookeeper:zookeeper:3.4.10'
+        force 'org.springframework:spring-context:4.3.21.RELEASE'
+        force 'org.springframework:spring-core:4.3.21.RELEASE'
+        force 'org.springframework:spring-core:4.3.21.RELEASE'
+        force 'io.grpc:grpc-netty:1.21.0'
+        force 'io.grpc:grpc-core:1.21.0'
+
+    }
+}
+
+
+ext{
+    amsVersion = "1.0.3"
+    grpcVersion =  "1.21.0"
+    protocVersion = "3.6.1"
+}
+
+
+
+
+dependencies {
+    compile ("com.apex:ams-spring-boot-starter:${amsVersion}")
+     //compileOnly("io.grpc:grpc-netty:${grpcVersion}")
+    //compile project(':ams-protocol')
+    compile project(':ams-protocol')
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+   // compile project(':ams-protocol')
+}

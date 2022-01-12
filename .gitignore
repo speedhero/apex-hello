@@ -1,0 +1,15 @@
+# Project exclude paths
+/.gradle/
+/ams-client/build/
+/ams-client/build/classes/java/test/
+/ams-client/out/
+/ams-client/out/test/classes/
+/ams-protocol/build/
+/ams-protocol/build/classes/java/main/
+/ams-protocol/out/
+/ams-protocol/out/production/classes/
+/ams-server/build/
+/ams-server/build/classes/java/main/
+/ams-server/out/
+/ams-server/out/production/classes/
+/build/

@@ -1,0 +1,83 @@
+buildscript {
+    dependencies {
+        classpath "com.google.protobuf:protobuf-gradle-plugin:0.8.17"
+    }
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+}
+
+repositories {
+    mavenLocal()
+    maven {
+        credentials {
+            username = "${NEXUS_USER}"
+            password = "${NEXUS_PASSWORD}"
+        }
+        url "http://192.168.184.28:8081/repository/maven-public/"
+    }
+    mavenCentral()
+}
+
+apply plugin: 'java'
+apply plugin: 'com.google.protobuf'
+apply plugin: 'maven'
+apply plugin: 'maven-publish'
+
+group 'apexsoft'
+version '1.1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+sourceSets {
+    main {
+        java {
+            srcDirs = [
+                    'src/main/java',
+                    'src/main/proto',
+                    'generatedSrc/main/java',
+                    'generatedSrc/main/grpc'
+            ]
+        }
+    }
+}
+
+ext{
+    amsVersion = "1.0.3"
+    grpcVersion =  "1.21.0"
+    protocVersion = "3.6.1"
+}
+
+protobuf {
+    protoc {
+        artifact = "com.google.protobuf:protoc:3.6.1"
+    }
+    plugins {
+        grpc {
+            artifact = "io.grpc:protoc-gen-grpc-java:${grpcVersion}"
+        }
+    }
+    generateProtoTasks.generatedFilesBaseDir = "$projectDir/generatedSrc"
+    generateProtoTasks {
+        all()*.plugins {
+            grpc {}
+        }
+    }
+}
+
+clean {
+    delete protobuf.generatedFilesBaseDir
+}
+//implementation  当前项目依赖，当其他项目引入本项目依赖时，不会引入
+//runtimeOnly 运行时才依赖
+//compile 当前项目依赖，并且可以传递依赖，当其他项目引入本项目依赖时，会引入
+//如果你的jar包/依赖代码 仅在运行的时候需要，但是在编译时不需要依赖,就用runtime
+//仅在编译的时候需要，但是在运行时不需要依赖,就用providedCompile
+dependencies {
+    compileOnly "com.google.protobuf:protobuf-java:${protocVersion}"
+    compileOnly "io.grpc:grpc-protobuf:${grpcVersion}"
+    //compileOnly "io.grpc:grpc-netty:${grpcVersion}"
+    compileOnly("io.grpc:grpc-stub:${grpcVersion}")
+}
