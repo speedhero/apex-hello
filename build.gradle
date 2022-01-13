@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        springBootVersion = '1.5.16.RELEASE'
+        springBootVersion = '2.2.6.RELEASE'
     }
 
     repositories {
@@ -34,7 +34,9 @@ configurations.all {
 
 apply plugin: 'java'
 apply plugin: 'war'
+apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
 
 group = 'apexsoft.ams'
 version = '1.0.0-SNAPSHOT'
@@ -70,7 +72,7 @@ dependencies {
     //# 如果依赖aas-spring-stater,则不用加入ams依赖，aas默认依赖ams
     compile ("com.apex:ams-spring-boot-starter:${amsVersion}")
 
-
+    compile ("org.springframework.boot:spring-boot-starter:2.2.6.RELEASE")
     compile("org.springframework.boot:spring-boot-starter-web")
     compile("org.springframework.boot:spring-boot-starter-log4j2")
 

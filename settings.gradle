@@ -1,6 +1,6 @@
 rootProject.name = 'helloworld'
 include 'ams-protocol'
 include 'ams-client'
-include 'ams-server'
+
 
 
